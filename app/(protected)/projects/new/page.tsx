@@ -175,11 +175,11 @@ const shouldAutoSelect = (assessment: RiskAssessment, projectData: any, eventDat
  }
   
   // Check season
-  if (criteria.seasons && criteria.seasons.length > 0) {
+ if (criteria.season && criteria.season.length > 0) {
     const month = eventDate.getMonth();
     const currentSeason = getSeason(month);
-    console.log('Season check:', currentSeason, 'in', criteria.seasons);
-   if (!criteria.seasons.includes(currentSeason)) {
+   console.log('Season check:', currentSeason, 'in', criteria.season);
+   if (!criteria.season.includes(currentSeason)) {
      console.log('Season mismatch');
      return false;
    }
