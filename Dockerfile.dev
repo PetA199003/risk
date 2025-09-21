@@ -9,7 +9,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install all dependencies (including dev dependencies, suppress warnings)
-RUN npm install --silent
+RUN npm install --silent 2>/dev/null || npm install
 
 # Create data directory
 RUN mkdir -p /app/data
