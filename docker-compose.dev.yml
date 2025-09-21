@@ -4,33 +4,25 @@ services:
   app:
     build: 
       context: .
-      target: development
+      dockerfile: Dockerfile.dev
     ports:
       - "3000:3000"
     environment:
       - NODE_ENV=development
-      - DATABASE_URL=postgresql://postgres:password@db:5432/gbu_app
       - NEXTAUTH_SECRET=Jg5QaXU8+VGFmQqjt+KrxfT2Hs7Lp9Mn3Bv6Cx1Zy4=
       - NEXTAUTH_URL=http://localhost:3000
-      - PRISMA_CLI_BINARY_TARGETS=linux-musl
-    depends_on:
-      - db
+      # Supabase (optional)
+      - NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL:-}
+      - NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY:-}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY:-}
     volumes:
       - .:/app
-      - dev_node_modules:/app/node_modules
-    command: sh -c "npm ci && npx prisma generate && npm run dev"
-
-  db:
-    image: postgres:15-alpine
-    environment:
-      - POSTGRES_DB=gbu_app
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - /app/node_modules
+      - /app/.next
+      - dev_data:/app/data
+    restart: unless-stopped
+    command: npm run dev
 
 volumes:
-  postgres_data:
-  dev_node_modules:
+  dev_data:
+    driver: local

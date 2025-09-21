@@ -1,18 +1,25 @@
-FROM node:18-alpine as development
+FROM node:18-alpine
 
-# Install dependencies needed for Prisma
-RUN apk add --no-cache libc6-compat openssl
+# Install dependencies needed for development
+RUN apk add --no-cache libc6-compat openssl curl git
 
 WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
-COPY prisma ./prisma/
 
+# Install all dependencies (including dev dependencies)
+RUN npm install
+
+# Create data directory
+RUN mkdir -p /app/data
 
 # Copy source code
 COPY . .
 
 EXPOSE 3000
+
+ENV PORT 3000
+ENV HOSTNAME "0.0.0.0"
 
 CMD ["npm", "run", "dev"]

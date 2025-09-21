@@ -2,10 +2,23 @@
 
 Ein System zur Verwaltung von Gefährdungsbeurteilungen und Unterweisungen für Veranstaltungsprojekte.
 
-## Docker Setup (Empfohlen)
+## 🐳 Docker Setup (Empfohlen)
 
-### Entwicklung mit Docker
+Das System kann vollständig mit Docker gestartet werden. Alle Abhängigkeiten und die Anwendung werden automatisch in Containern ausgeführt.
 
+### Schnellstart
+
+```bash
+# Einfacher Start (Produktion)
+./start-docker.sh prod
+
+# Oder Entwicklungsmodus
+./start-docker.sh dev
+```
+
+### Detaillierte Docker-Befehle
+
+#### Entwicklung mit Docker (Hot Reload)
 ```bash
 # Entwicklungsumgebung starten
 npm run docker:dev
@@ -14,7 +27,7 @@ npm run docker:dev
 docker-compose -f docker-compose.dev.yml up --build
 ```
 
-### Produktion mit Docker
+#### Produktion mit Docker
 
 ```bash
 # Produktionsumgebung starten
@@ -24,23 +37,81 @@ npm run docker:prod
 docker-compose up --build
 ```
 
-### Nur Datenbank starten
+#### Container-Verwaltung
 
 ```bash
-npm run docker:db
+# Container stoppen
+npm run docker:stop
+
+# Logs anzeigen
+npm run docker:logs
+
+# Komplett aufräumen (Container, Volumes, Images löschen)
+npm run docker:clean
 ```
 
-### Datenbank-Operationen mit Docker
+### Verfügbare Skripte
 
 ```bash
-# Prisma Client generieren
-docker-compose exec app npx prisma generate
+# Mit Start-Skript
+./start-docker.sh dev     # Entwicklung
+./start-docker.sh prod    # Produktion  
+./start-docker.sh stop    # Stoppen
+./start-docker.sh logs    # Logs anzeigen
+./start-docker.sh clean   # Aufräumen
 
-# Datenbank migrieren
-docker-compose exec app npx prisma db push
+# Mit npm
+npm run docker:dev        # Entwicklung
+npm run docker:prod       # Produktion
+npm run docker:stop       # Stoppen
+npm run docker:logs       # Logs
+npm run docker:clean      # Aufräumen
+```
 
-# Datenbank mit Beispieldaten füllen
-docker-compose exec app npm run db:seed
+### Systemanforderungen
+
+- **Docker** (Version 20.10+)
+- **Docker Compose** (Version 2.0+)
+- **Mindestens 2GB RAM** für Container
+- **Port 3000** muss verfügbar sein
+
+### Erste Schritte
+
+1. **Repository klonen**
+   ```bash
+   git clone <repository-url>
+   cd gbu-veranstaltungsmanagement
+   ```
+
+2. **Docker starten**
+   ```bash
+   ./start-docker.sh prod
+   ```
+
+3. **Anwendung öffnen**
+   - Browser: http://localhost:3000
+   - Login mit Demo-Daten (siehe unten)
+
+### Persistente Daten
+
+- **Entwicklung**: Daten werden in `dev_data` Volume gespeichert
+- **Produktion**: Daten werden in `app_data` Volume gespeichert
+- **Backup**: Volumes bleiben bei Container-Neustarts erhalten
+
+### Troubleshooting
+
+```bash
+# Container-Status prüfen
+docker-compose ps
+
+# Logs anzeigen
+docker-compose logs app
+
+# Container neu starten
+docker-compose restart app
+
+# Komplett neu bauen
+docker-compose up --build --force-recreate
 ```
 
 ## Setup
