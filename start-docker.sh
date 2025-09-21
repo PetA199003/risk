@@ -12,8 +12,14 @@ if ! docker info > /dev/null 2>&1; then
 fi
 
 # Check if docker-compose is available
-if ! command -v docker-compose &> /dev/null; then
-    echo "❌ docker-compose not found. Please install docker-compose."
+if ! command -v docker &> /dev/null; then
+    echo "❌ docker not found. Please install docker."
+    exit 1
+fi
+
+# Check if docker compose plugin is available
+if ! docker compose version &> /dev/null; then
+    echo "❌ docker compose plugin not found. Please install docker compose plugin."
     exit 1
 fi
 
@@ -42,7 +48,7 @@ case "${1:-prod}" in
         echo "- Development dependencies included"
         echo "- Port: http://localhost:3000"
         echo ""
-        docker-compose -f docker-compose.dev.yml up --build
+        docker compose -f docker-compose.dev.yml up --build
         ;;
     "prod")
         echo "🏭 Starting PRODUCTION environment..."
@@ -50,22 +56,22 @@ case "${1:-prod}" in
         echo "- Production dependencies only"
         echo "- Port: http://localhost:3000"
         echo ""
-        docker-compose up --build
+        docker compose up --build
         ;;
     "stop")
         echo "🛑 Stopping all containers..."
-        docker-compose down
-        docker-compose -f docker-compose.dev.yml down
+        docker compose down
+        docker compose -f docker-compose.dev.yml down
         echo "✅ All containers stopped"
         ;;
     "logs")
         echo "📋 Showing container logs..."
-        docker-compose logs -f
+        docker compose logs -f
         ;;
     "clean")
         echo "🧹 Cleaning up containers, volumes, and images..."
-        docker-compose down -v --rmi all
-        docker-compose -f docker-compose.dev.yml down -v --rmi all
+        docker compose down -v --rmi all
+        docker compose -f docker-compose.dev.yml down -v --rmi all
         echo "✅ Cleanup completed"
         ;;
     "help"|"-h"|"--help")

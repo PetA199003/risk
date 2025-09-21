@@ -24,7 +24,7 @@ Das System kann vollständig mit Docker gestartet werden. Alle Abhängigkeiten u
 npm run docker:dev
 
 # Oder manuell
-docker-compose -f docker-compose.dev.yml up --build
+docker compose -f docker-compose.dev.yml up --build
 ```
 
 #### Produktion mit Docker
@@ -34,7 +34,7 @@ docker-compose -f docker-compose.dev.yml up --build
 npm run docker:prod
 
 # Oder manuell
-docker-compose up --build
+docker compose up --build
 ```
 
 #### Container-Verwaltung
@@ -102,16 +102,16 @@ npm run docker:clean      # Aufräumen
 
 ```bash
 # Container-Status prüfen
-docker-compose ps
+docker compose ps
 
 # Logs anzeigen
-docker-compose logs app
+docker compose logs app
 
 # Container neu starten
-docker-compose restart app
+docker compose restart app
 
 # Komplett neu bauen
-docker-compose up --build --force-recreate
+docker compose up --build --force-recreate
 ```
 
 ## Setup

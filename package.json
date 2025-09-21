@@ -9,11 +9,11 @@
     "lint": "next lint",
     "docker:build": "docker build -t gbu-app .",
     "docker:run": "docker run -p 3000:3000 gbu-app",
-    "docker:dev": "docker-compose -f docker-compose.dev.yml up --build",
-    "docker:prod": "docker-compose up --build",
-    "docker:stop": "docker-compose down",
-    "docker:logs": "docker-compose logs -f",
-    "docker:clean": "docker-compose down -v --rmi all"
+    "docker:dev": "docker compose -f docker-compose.dev.yml up --build",
+    "docker:prod": "docker compose up --build",
+    "docker:stop": "docker compose down",
+    "docker:logs": "docker compose logs -f",
+    "docker:clean": "docker compose down -v --rmi all"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^1.1.0",
