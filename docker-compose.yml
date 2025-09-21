@@ -8,7 +8,7 @@ services:
     environment:
       - NODE_ENV=production
       - DATABASE_URL=postgresql://postgres:password@db:5432/gbu_app
-      - NEXTAUTH_SECRET=your-secret-key-here
+      - NEXTAUTH_SECRET=Jg5QaXU8+VGFmQqjt+KrxfT2Hs7Lp9Mn3Bv6Cx1Zy4=
       - NEXTAUTH_URL=http://localhost:3000
     depends_on:
       - db

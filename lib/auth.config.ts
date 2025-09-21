@@ -1,6 +1,13 @@
 import type { NextAuthConfig } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { UserRole } from '@prisma/client';
+import { DefaultSession } from 'next-auth';
+
+// Define UserRole enum locally
+export enum UserRole {
+  ADMIN = 'ADMIN',
+  PROJEKTLEITER = 'PROJEKTLEITER',
+  MITARBEITER = 'MITARBEITER'
+}
 
 declare module 'next-auth' {
   interface Session {

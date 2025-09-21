@@ -1,4 +1,9 @@
-import { UserRole } from '@prisma/client';
+// Define UserRole enum locally since we can't import from Prisma
+export enum UserRole {
+  ADMIN = 'ADMIN',
+  PROJEKTLEITER = 'PROJEKTLEITER',
+  MITARBEITER = 'MITARBEITER'
+}
 
 export function hasPermission(userRole: UserRole, requiredRole: UserRole): boolean {
   const roleHierarchy = {

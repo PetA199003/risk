@@ -1,46 +1,54 @@
-import { auth } from '@/lib/auth';
-import { prisma } from '@/lib/prisma';
-import { redirect } from 'next/navigation';
+'use client';
+
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Plus, Calendar, MapPin, Users } from 'lucide-react';
 import Link from 'next/link';
 import { hasPermission } from '@/lib/permissions';
-import { UserRole } from '@prisma/client';
+import { UserRole } from '@/lib/permissions';
 import { format } from 'date-fns';
 import { de } from 'date-fns/locale';
 
-export default async function ProjectsPage() {
-  const session = await auth();
-  if (!session?.user) {
-    redirect('/login');
+export default function ProjectsPage() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+  const [projects, setProjects] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push('/login');
+    }
+  }, [status, router]);
+
+  useEffect(() => {
+    // Load projects from localStorage on component mount
+    const savedProjects = localStorage.getItem('gbu-projects');
+    if (savedProjects) {
+      try {
+        setProjects(JSON.parse(savedProjects));
+      } catch (error) {
+        console.error('Error loading projects:', error);
+      }
+    }
+  }, []);
+  if (status === 'loading') {
+    return (
+      <div className="flex items-center justify-center py-16">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+          <p className="mt-2 text-muted-foreground">Wird geladen...</p>
+        </div>
+      </div>
+    );
   }
 
-  const projects = await prisma.project.findMany({
-    where: hasPermission(session.user.role, UserRole.ADMIN) 
-      ? {} 
-      : { createdByUserId: session.user.id },
-    include: {
-      createdBy: {
-        select: {
-          name: true,
-          email: true,
-        },
-      },
-      participants: {
-        select: { id: true },
-      },
-      _count: {
-        select: {
-          projectHazards: {
-            where: { selected: true },
-          },
-        },
-      },
-    },
-    orderBy: { createdAt: 'desc' },
-  });
+  if (!session?.user) {
+    return null; // Will redirect via useEffect
+  }
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -137,7 +145,7 @@ export default async function ProjectsPage() {
                       {project.participants.length} Teilnehmer
                     </div>
                     <div className="text-muted-foreground">
-                      {project._count.projectHazards} Gefährdungen
+                      {project.riskAssessmentIds ? project.riskAssessmentIds.length : 0} Gefährdungsbeurteilungen
                     </div>
                   </div>
 

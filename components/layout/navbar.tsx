@@ -32,7 +32,7 @@ import {
   X,
 } from 'lucide-react';
 import { hasPermission } from '@/lib/permissions';
-import { UserRole } from '@prisma/client';
+import { UserRole } from '@/lib/permissions';
 import { cn } from '@/lib/utils';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 
@@ -43,6 +43,11 @@ const navigation = [
 
 const adminNavigation = [
   { name: 'Benutzer', href: '/admin/users', icon: Users },
+  { name: 'Gefährdungen', href: '/admin/hazards', icon: Shield },
+  { name: 'Auswahlkriterien', href: '/admin/criteria', icon: Settings },
+];
+
+const projektleiterNavigation = [
   { name: 'Gefährdungen', href: '/admin/hazards', icon: Shield },
 ];
 
@@ -55,6 +60,7 @@ export function Navbar() {
 
   const userRole = session.user.role;
   const isAdmin = hasPermission(userRole, UserRole.ADMIN);
+  const isProjektleiter = hasPermission(userRole, UserRole.PROJEKTLEITER);
 
   return (
     <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -87,17 +93,17 @@ export function Navbar() {
                   </Link>
                 ))}
               
-              {isAdmin && (
+              {(isAdmin || isProjektleiter) && (
                 <NavigationMenu>
                   <NavigationMenuList>
                     <NavigationMenuItem>
                       <NavigationMenuTrigger className="h-auto p-0 border-b-2 border-transparent hover:border-gray-300 rounded-none bg-transparent">
                         <Settings className="mr-2 h-4 w-4" />
-                        Administration
+                        {isAdmin ? 'Administration' : 'Verwaltung'}
                       </NavigationMenuTrigger>
                       <NavigationMenuContent>
                         <ul className="w-48 p-2">
-                          {adminNavigation.map((item) => (
+                          {(isAdmin ? adminNavigation : projektleiterNavigation).map((item) => (
                             <li key={item.name}>
                               <NavigationMenuLink asChild>
                                 <Link
@@ -192,11 +198,13 @@ export function Navbar() {
                       </Link>
                     ))}
 
-                  {isAdmin && (
+                  {(isAdmin || isProjektleiter) && (
                     <>
                       <div className="pt-4 border-t">
-                        <p className="px-3 text-sm font-medium text-muted-foreground mb-2">Administration</p>
-                        {adminNavigation.map((item) => (
+                        <p className="px-3 text-sm font-medium text-muted-foreground mb-2">
+                          {isAdmin ? 'Administration' : 'Verwaltung'}
+                        </p>
+                        {(isAdmin ? adminNavigation : projektleiterNavigation).map((item) => (
                           <Link
                             key={item.name}
                             href={item.href}
