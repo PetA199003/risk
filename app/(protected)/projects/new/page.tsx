@@ -40,6 +40,21 @@ interface RiskAssessment {
   group?: string;
   createdAt: string;
   updatedAt: string;
+  autoSelect?: {
+    location?: {[key: string]: boolean};
+    project?: {[key: string]: boolean};
+    season?: string[];
+    customCriteria?: string[];
+    customCriteriaValues?: {[key: string]: any};
+    isOutdoor?: boolean;
+    hasElectricity?: boolean;
+    hasGenerator?: boolean;
+    hasWorkAbove2m?: boolean;
+    hasPublicAccess?: boolean;
+    hasNightWork?: boolean;
+    hasTrafficArea?: boolean;
+    hasHazardousMaterials?: boolean;
+  };
 }
 
 const getRiskColor = (risk: number): string => {
