@@ -322,7 +322,6 @@ export default function NewProjectPage() {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         participants: [],
-        _count: { projectHazards: 0 },
         riskAssessmentIds: selectedRiskAssessments,
         _count: { projectHazards: selectedRiskAssessments.length }
       };
