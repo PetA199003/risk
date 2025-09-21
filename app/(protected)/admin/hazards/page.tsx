@@ -546,7 +546,7 @@ export default function HazardsPage() {
     : globalRiskAssessments.filter(a => a.group === selectedGroup);
 
   // Get groups that are actually used
-  const usedGroups = [...new Set(globalRiskAssessments.map(a => a.group).filter(Boolean))];
+  const usedGroups = Array.from(new Set(globalRiskAssessments.map(a => a.group).filter(Boolean)));
 
   const handleGroupInputChange = (value: string) => {
     if (value === 'none') {
