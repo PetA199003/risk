@@ -9,7 +9,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies (suppress warnings for cleaner output)
-RUN npm ci --only=production --silent 2>/dev/null || npm install --only=production --silent
+RUN npm ci --silent 2>/dev/null || npm install --silent
 RUN npm cache clean --force
 
 # Copy source code
@@ -17,6 +17,10 @@ COPY . .
 
 # Create data directory for persistent storage
 RUN mkdir -p /app/data
+
+# Set environment variables for build
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
 
 # Build the application
 RUN npm run build

@@ -179,7 +179,14 @@ const shouldAutoSelect = (assessment: RiskAssessment, projectData: any, eventDat
     const month = eventDate.getMonth();
     const currentSeason = getSeason(month);
    console.log('Season check:', currentSeason, 'in', criteria.season);
-   if (!criteria.season.includes(currentSeason)) {
+    const seasonMap: { [key: string]: string } = {
+      'spring': 'Frühling',
+      'summer': 'Sommer', 
+      'autumn': 'Herbst',
+      'winter': 'Winter'
+    };
+    const germanSeason = seasonMap[currentSeason];
+    if (!criteria.season.includes(germanSeason)) {
      console.log('Season mismatch');
      return false;
    }
@@ -190,7 +197,7 @@ const shouldAutoSelect = (assessment: RiskAssessment, projectData: any, eventDat
 };
 
 // Helper function to get season from month
-const getSeason = (month: number): string => {
+const getSeason = (month: number): 'spring' | 'summer' | 'autumn' | 'winter' => {
   if (month >= 2 && month <= 4) return 'spring';
   if (month >= 5 && month <= 7) return 'summer';
   if (month >= 8 && month <= 10) return 'autumn';
@@ -289,16 +296,6 @@ export default function NewProjectPage() {
         return;
       }
 
-      // Get selected risk assessments
-      const selectedAssessments = globalRiskAssessments
-        .filter(a => selectedRiskAssessments.includes(a.id))
-        .map(assessment => ({
-          ...assessment,
-          id: Date.now().toString() + Math.random().toString(36).substr(2, 9), // New unique ID
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        }));
-
       // Create new project object
       const newProject = {
         id: Date.now().toString(),
@@ -317,13 +314,12 @@ export default function NewProjectPage() {
         hasPublicAccess: formData.hasPublicAccess,
         hasNightWork: formData.hasNightWork,
         hasTrafficArea: formData.hasTrafficArea,
-        createdByUserId: session?.user?.id || '1',
+        createdByUserId: session?.user?.id ?? '1',
         status: 'ENTWURF',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         participants: [],
         riskAssessmentIds: selectedRiskAssessments,
-        _count: { projectHazards: selectedRiskAssessments.length }
       };
 
       // Save to localStorage
