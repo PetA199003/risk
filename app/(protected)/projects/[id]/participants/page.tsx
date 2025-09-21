@@ -126,7 +126,7 @@ export default function ParticipantsPage() {
       // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 500));
 
-      let updatedParticipants;
+      let updatedParticipants: any[];
 
       if (editingParticipant) {
         // Update existing participant
