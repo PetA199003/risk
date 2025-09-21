@@ -16,6 +16,8 @@ import { toast } from 'sonner';
 import { hasPermission, UserRole } from '@/lib/permissions';
 import { SignaturePadComponent } from '@/components/signature-pad';
 import { generateParticipantListPDF, downloadPDF } from '@/lib/pdf-generator';
+import { format } from 'date-fns';
+import { de } from 'date-fns/locale';
 
 export default function ParticipantsPage() {
   const params = useParams();

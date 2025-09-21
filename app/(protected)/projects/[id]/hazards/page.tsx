@@ -117,7 +117,7 @@ export default function ProjectHazardsPage() {
   const handleAssessmentToggle = (assessmentId: string, checked: boolean) => {
     if (!canManage) return;
 
-    let updatedAssessments;
+    let updatedAssessments: string[];
     if (checked) {
       updatedAssessments = [...projectRiskAssessments, assessmentId];
     } else {
